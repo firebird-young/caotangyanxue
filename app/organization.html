@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>机构主页 - 成都古猫文化旅游有限公司</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+            background: #d7dce2;
+            min-height: 100vh;
+        }
+
+        /* ===== 顶部导航 ===== */
+        .top-nav {
+            height: 50px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .back-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: #f5f5f5;
+            font-size: 18px;
+            color: #666;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .back-btn:active { background: #e8e8e8; }
+        .top-nav-title {
+            flex: 1;
+            text-align: center;
+            font-size: 17px;
+            font-weight: 600;
+            color: #333;
+            padding-right: 32px;
+        }
+
+        /* ===== 内容容器 ===== */
+        .page-wrap {
+            max-width: 430px;
+            margin: 0 auto;
+            background: #f5f7fa;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 30px;
+            box-shadow: 0 0 24px rgba(0,0,0,0.12);
+        }
+
+        /* ===== 机构信息区 ===== */
+        .org-header {
+            background: #fff;
+            padding: 18px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+        }
+        .org-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 1px solid #f0f0f0;
+        }
+        .org-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .org-info {
+            flex: 1;
+            min-width: 0;
+            margin-right: 12px;
+        }
+        .org-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a1a1a;
+            line-height: 1.4;
+            word-break: break-all;
+        }
+        .org-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .org-circle-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #fff;
+            border: 1px solid #E84C3D;
+            color: #E84C3D;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .org-circle-btn:active {
+            background: #FDE6C4;
+        }
+
+        /* ===== 课程列表区 ===== */
+        .course-list {
+            padding: 12px 16px 0;
+        }
+        .course-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .course-cover {
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+        }
+        .course-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .course-info {
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .course-detail {
+            flex: 1;
+            min-width: 0;
+        }
+        .course-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+        .course-price {
+            font-size: 15px;
+            color: #E84C3D;
+            font-weight: 600;
+        }
+        .course-detail-btn {
+            flex-shrink: 0;
+            background: #E84C3D;
+            color: #fff;
+            border: none;
+            border-radius: 18px;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: opacity 0.15s;
+        }
+        .course-detail-btn:active { opacity: 0.85; }
+
+        /* 占位（无更多时） */
+        .empty-tip {
+            text-align: center;
+            color: #999;
+            font-size: 13px;
+            padding: 30px 0;
+        }
+
+        /* ===== 顶部操作列（参考图右侧 ⋯ ⊙） ===== */
+        .nav-right {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-right .nav-circle-dots,
+        .nav-right .nav-circle-eye {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1px solid #d3d8df;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #555;
+            cursor: pointer;
+            background: #fff;
+        }
+
+        /* ===== 微信二维码弹窗 ===== */
+        .wx-mask {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 200; display: none;
+            align-items: center; justify-content: center;
+        }
+        .wx-mask.show { display: flex; }
+        .wx-pop {
+            width: 280px; background: #fff; border-radius: 16px;
+            padding: 24px 20px; text-align: center;
+        }
+        .wx-pop .wx-title { font-size: 16px; font-weight: 600; color: #1a1a2e; margin-bottom: 4px; }
+        .wx-pop .wx-sub { font-size: 12px; color: #999; margin-bottom: 16px; }
+        .wx-pop .wx-qr {
+            width: 180px; height: 180px; margin: 0 auto; border-radius: 8px;
+            overflow: hidden; border: 1px solid #eee;
+        }
+        .wx-pop .wx-qr img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .wx-pop .wx-tip { font-size: 12px; color: #666; margin-top: 14px; line-height: 1.6; }
+        .wx-pop .wx-close {
+            margin-top: 16px; width: 100%; height: 40px; border: none; border-radius: 20px;
+            background: #07C160; color: #fff; font-size: 14px; cursor: pointer;
+        }
+        .wx-pop .wx-close:hover { opacity: 0.9; }
+
+        /* ── 功能说明面板 ── */
+        body {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 24px;
+            padding: 20px;
+        }
+        body .page-wrap {
+            margin: 0;
+            flex-shrink: 0;
+        }
+        .doc-panel {
+            width: 560px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 20px rgba(0,0,0,.08);
+            padding: 24px 28px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', Arial, sans-serif;
+            line-height: 1.7;
+            font-size: 14px;
+            color: #333;
+            flex-shrink: 0;
+        }
+        .doc-panel::-webkit-scrollbar { width: 5px; }
+        .doc-panel::-webkit-scrollbar-thumb { background: #d0d5e0; border-radius: 3px; }
+        .doc-panel .doc-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1F3864;
+            border-bottom: 2px solid #2E75B6;
+            padding-bottom: 10px;
+            margin-bottom: 16px;
+        }
+        .doc-panel h3 { font-size: 16px; font-weight: 600; color: #2E75B6; margin: 16px 0 8px; }
+        .doc-panel p { font-size: 13px; color: #555; margin-bottom: 6px; }
+        .doc-panel ul { padding-left: 20px; margin: 4px 0 8px; }
+        .doc-panel li { margin-bottom: 3px; font-size: 13px; color: #555; }
+        @media (max-width: 1100px) {
+            body { flex-direction: column; align-items: center; }
+            .doc-panel { width: 100%; max-width: 430px; max-height: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-wrap">
+    <!-- 顶部导航 -->
+    <div class="top-nav">
+        <button class="back-btn" onclick="history.back()">‹</button>
+        <div class="top-nav-title">机构主页</div>
+        <div class="nav-right">
+            <span class="nav-circle-dots">⋯</span>
+            <span class="nav-circle-eye">⊙</span>
+        </div>
+    </div>
+
+    <!-- 机构信息 -->
+    <div class="org-header">
+        <div class="org-logo">
+            <img src="../asset/古猫logo.png" alt="成都古猫文化旅游有限公司">
+        </div>
+        <div class="org-info">
+            <div class="org-name">成都古猫文化旅游有限公司</div>
+        </div>
+        <div class="org-actions">
+            <button class="org-circle-btn" onclick="showWxQr()" title="微信客服"><svg viewBox="0 0 24 24" width="20" height="20" fill="#07C160"><path d="M9.5 4C5.36 4 2 6.9 2 10.5c0 1.98 1.02 3.74 2.6 4.9l-.6 2.1 2.3-1.18c.95.3 1.95.47 3 .47.28 0 .55-.01.82-.04A5.5 5.5 0 0 1 9.5 12.5c0-3.04 2.46-5.5 5.5-5.5.08 0 .16 0 .24.01A6.5 6.5 0 0 0 9.5 4zm-2.7 4.4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm5.4 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM15 10.5c-2.5 0-4.5 2-4.5 4.5S12.5 19.5 15 19.5c.68 0 1.33-.14 1.92-.4l1.58.82-.45-1.6c1.26-.87 2.1-2.3 2.1-3.92 0-2.5-2-4.5-4.5-4.5zm-1.5 3.2c.44 0 .8.36.8.8s-.36.8-.8.8-.8-.36-.8-.8.36-.8.8-.8zm3 0c.44 0 .8.36.8.8s-.36.8-.8.8-.8-.36-.8-.8.36-.8.8-.8z"/></svg></button>
+            <button class="org-circle-btn" onclick="phoneConsult()" title="电话咨询">📞</button>
+        </div>
+    </div>
+
+    <!-- 该机构提供的课程列表 -->
+    <div class="course-list">
+        <div class="course-card">
+            <div class="course-cover">
+                <img src="../asset/我为杜甫建茅屋.png" alt="我为杜甫建茅屋">
+            </div>
+            <div class="course-info">
+                <div class="course-detail">
+                    <div class="course-name">我为杜甫建茅屋</div>
+                    <div class="course-price">¥168元</div>
+                </div>
+                <button class="course-detail-btn" onclick="goCourseDetail()">活动详情</button>
+            </div>
+        </div>
+
+        <div class="empty-tip">— 已经到底了 —</div>
+    </div>
+</div>
+
+<div class="doc-panel">
+    <div class="doc-title">机构主页 - 功能说明</div>
+    <div class="doc-section">
+        <h3>1. 页面用途</h3>
+        <p>机构主页用于展示机构的基本信息及其提供的课程列表，方便用户联系机构并查看相关活动课程。</p>
+    </div>
+    <div class="doc-section">
+        <h3>2. 机构信息区</h3>
+        <ul>
+            <li><b>机构展示</b>：左侧展示机构圆形 Logo，右侧展示机构。</li>
+            <li><b>微信客服</b>：点击绿色微信图标弹出二维码弹窗，提示长按识别二维码添加机构微信咨询详情。</li>
+            <li><b>电话咨询</b>：点击电话按钮弹出确认提示，确认后调用系统拨号拨打咨询电话。需要二次确认。</li>
+        </ul>
+    </div>
+    <div class="doc-section">
+        <h3>3. 课程列表</h3>
+        <ul>
+            <li><b>课程卡片</b>：展示该机构下面的在线的课程。</li>
+            <li><b>活动详情</b>：点击「活动详情」按钮跳转至对应课程详情页查看完整介绍。</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    function phoneConsult() {
+        // 第一次确认
+        if (!confirm('是否拨打咨询电话 028-22222222？')) {
+            return;
+        }
+        // 第二次确认
+        if (confirm('确认将为您拨打电话 028-22222222，是否继续？')) {
+            window.location.href = 'tel:02822222222';
+        }
+    }
+
+    function goCourseDetail() {
+        window.location.href = 'course-detail.html';
+    }
+
+    // 微信客服：弹出二维码
+    function showWxQr() {
+        document.getElementById('wxMask').classList.add('show');
+    }
+    function closeWxQr() {
+        document.getElementById('wxMask').classList.remove('show');
+    }
+</script>
+
+<!-- 微信二维码弹窗 -->
+<div class="wx-mask" id="wxMask" onclick="if(event.target===this)closeWxQr()">
+    <div class="wx-pop">
+        <div class="wx-title">微信咨询</div>
+        <div class="wx-qr">
+            <img src="../asset/wechat-qr.png" alt="微信二维码">
+        </div>
+        <div class="wx-tip">长按识别二维码<br>添加机构微信咨询详情</div>
+        <button class="wx-close" onclick="closeWxQr()">我知道了</button>
+    </div>
+</div>
+
+</body>
+</html>

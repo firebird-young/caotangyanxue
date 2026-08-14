@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台管理系统 - 业务参数配置</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <style>
+        /* ========== 业务参数配置页专属样式 ========== */
+        .config-hint {
+            font-size: 12px;
+            color: #909399;
+            margin-top: 6px;
+        }
+
+        /* 参数配置项 */
+        .config-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .config-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 18px;
+            border: 1px solid #ebeef5;
+            border-radius: 4px;
+            background: #fafbfc;
+        }
+
+        .config-item:hover {
+            border-color: #c8d8ee;
+            background: #f5faff;
+        }
+
+        .config-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .config-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #eaf3ff;
+            color: #2c8df8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .config-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .config-desc {
+            font-size: 12px;
+            color: #909399;
+            margin-top: 3px;
+        }
+
+        .config-value {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .config-value .value-text {
+            font-size: 14px;
+            color: #2c8df8;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header class="admin-header">
+        <div class="header-left">
+            <button class="menu-toggle" title="菜单">
+                <span class="menu-icon">☰</span>
+            </button>
+        </div>
+        <div class="header-right">
+            <button class="icon-btn" title="帮助">?</button>
+            <div style="display:flex;align-items:center;gap:12px">
+              <button class="btn btn-default" onclick="toggleFuncModal()" style="font-size:12px;padding:4px 12px;border-radius:6px;background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.4)">📖 功能说明</button>
+              <div class="user-avatar" title="用户">头</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主体内容 -->
+    <main class="admin-main">
+        <!-- 面包屑 -->
+        <div class="breadcrumb">
+            <span class="breadcrumb-item">首页</span>
+            <span class="breadcrumb-sep">/</span>
+            <span class="breadcrumb-item">业务参数配置</span>
+            <span class="breadcrumb-sep">/</span>
+            <span class="breadcrumb-item active">业务参数配置</span>
+        </div>
+
+        <!-- 卡片主体 -->
+        <div class="admin-card">
+            <!-- 卡片头部 -->
+            <div class="card-head">
+                <div class="tab-bar">
+                    <span class="tab-item active">● 业务参数配置</span>
+                </div>
+            </div>
+
+            <!-- 参数配置列表区 -->
+            <div class="card-body">
+                <div class="config-list" id="configList">
+                    <!-- 咨询电话 -->
+                    <div class="config-item" data-key="phone">
+                        <div class="config-info">
+                            <div class="config-icon">☎</div>
+                            <div>
+                                <div class="config-title">咨询电话</div>
+                                <div class="config-desc">展示在小程序，用户点击可直接拨打</div>
+                            </div>
+                        </div>
+                        <div class="config-value">
+                            <span class="value-text" id="phoneValue">028-12345678</span>
+                            <button class="btn btn-edit btn-mini" onclick="openEdit('phone')">修改</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 修改参数 弹窗 -->
+    <div class="modal-mask" id="modalMask">
+        <div class="modal" role="dialog" aria-labelledby="modalTitle" style="width:480px;">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">修改参数</h3>
+                <button class="modal-close" id="modalClose" aria-label="关闭">×</button>
+            </div>
+            <div class="modal-body">
+                <form class="form" id="configForm" autocomplete="off">
+                    <!-- 参数名称 -->
+                    <div class="form-item">
+                        <label class="form-label required"><span class="star">*</span>参数名称</label>
+                        <div class="form-control">
+                            <input type="text" class="input" id="cfgName" readonly style="background:#f5f7fa;color:#909399;" />
+                        </div>
+                    </div>
+                    <!-- 参数值 -->
+                    <div class="form-item">
+                        <label class="form-label required"><span class="star">*</span>参数值</label>
+                        <div class="form-control">
+                            <input type="text" class="input" id="cfgValue" placeholder="请输入参数值" />
+                        </div>
+                    </div>
+                    <!-- 备注 -->
+                    <div class="form-item">
+                        <label class="form-label">备注</label>
+                        <div class="form-control">
+                            <input type="text" class="input" id="cfgRemark" placeholder="选填，参数说明" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="btnSubmit">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== 功能说明浮窗 ====== -->
+    <div class="f-modal" id="funcModal">
+      <div class="fm-title">
+        <span>📖 功能说明</span>
+        <button class="fm-close" onclick="toggleFuncModal()">✕</button>
+      </div>
+      <div class="fm-body">
+        <p style="margin:0 0 12px;color:#666">「业务参数配置」模块用于维护系统运行所需的全局业务参数，目前支持一个参数：<strong>咨询电话</strong>。</p>
+        <h4>一、参数项</h4>
+        <ul>
+          <li><strong>咨询电话</strong>：必填文本，用于展示在页面底部及各咨询入口，用户点击可直接拨打。修改后点击「保存」立即生效。</li>
+        </ul>
+        <h4>二、操作方式</h4>
+        <ul>
+          <li>点击参数项右侧「<strong>修改</strong>」按钮，弹出编辑框，参数名称不可修改。</li>
+          <li>参数值为必填项，为空时无法保存。</li>
+        </ul>
+      </div>
+    </div>
+
+    <script>
+        // ========== 修改参数弹窗控制 ==========
+        var modalMask = document.getElementById('modalMask');
+        var cfgName = document.getElementById('cfgName');
+        var cfgValue = document.getElementById('cfgValue');
+        var cfgRemark = document.getElementById('cfgRemark');
+
+        var PARAM_META = {
+            phone: { name: '咨询电话', elId: 'phoneValue', remark: '' }
+        };
+
+        function openEdit(key) {
+            var meta = PARAM_META[key];
+            if (!meta) return;
+            cfgName.value = meta.name;
+            cfgValue.value = document.getElementById(meta.elId).textContent;
+            cfgRemark.value = meta.remark;
+            modalMask.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modalMask.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('modalClose').addEventListener('click', closeModal);
+        modalMask.addEventListener('click', function (e) {
+            if (e.target === modalMask) closeModal();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && modalMask.classList.contains('show')) closeModal();
+        });
+
+        // ========== 保存 ==========
+        document.getElementById('btnSubmit').addEventListener('click', function () {
+            var value = cfgValue.value.trim();
+            if (!value) {
+                alert('请输入参数值');
+                return;
+            }
+            var meta = PARAM_META.phone;
+            document.getElementById(meta.elId).textContent = value;
+            meta.remark = cfgRemark.value.trim();
+            alert('保存成功！');
+            closeModal();
+        });
+    </script>
+    <script>
+        // ========== 功能说明浮窗：开关 + 拖拽 ==========
+        function toggleFuncModal() {
+            var el = document.getElementById('funcModal');
+            el.classList.toggle('show');
+            if (el.classList.contains('show') && !el.dataset.dragged) {
+                el.style.left = '50%'; el.style.top = '50%'; el.style.transform = 'translate(-50%,-50%)';
+            }
+        }
+        (function () {
+            var modal, titleBar, offX, offY, dragging = false;
+            document.addEventListener('DOMContentLoaded', function () {
+                modal = document.getElementById('funcModal');
+                titleBar = modal.querySelector('.fm-title');
+                titleBar.addEventListener('mousedown', startDrag);
+                titleBar.addEventListener('touchstart', startDragTouch, { passive: true });
+                document.addEventListener('mousemove', onDrag);
+                document.addEventListener('mouseup', endDrag);
+                document.addEventListener('touchmove', onDragTouch, { passive: true });
+                document.addEventListener('touchend', endDrag);
+            });
+            function startDrag(e) { modal.dataset.dragged = '1'; modal.style.transform = ''; var rect = modal.getBoundingClientRect(); offX = e.clientX - rect.left; offY = e.clientY - rect.top; dragging = true; titleBar.style.cursor = 'grabbing'; }
+            function startDragTouch(e) { var t = e.touches[0]; modal.dataset.dragged = '1'; modal.style.transform = ''; var rect = modal.getBoundingClientRect(); offX = t.clientX - rect.left; offY = t.clientY - rect.top; dragging = true; }
+            function onDrag(e) { if (!dragging) return; modal.style.left = (e.clientX - offX) + 'px'; modal.style.top = (e.clientY - offY) + 'px'; }
+            function onDragTouch(e) { if (!dragging) return; var t = e.touches[0]; modal.style.left = (t.clientX - offX) + 'px'; modal.style.top = (t.clientY - offY) + 'px'; }
+            function endDrag() { dragging = false; if (titleBar) titleBar.style.cursor = 'grab'; }
+        })();
+    </script>
+</body>
+</html>

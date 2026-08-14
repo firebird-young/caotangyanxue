@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台管理系统 - 课程发布</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <style>
+        /* ========== 课程发布页专属样式 ========== */
+        .publish-section {
+            border: 1px solid #ebeef5;
+            border-radius: 4px;
+            padding: 16px 18px;
+        }
+
+        .publish-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 14px;
+        }
+
+        .publish-title .dot {
+            color: #f56c6c;
+            margin-right: 4px;
+        }
+
+        /* 标签栏 */
+        .tab-bar {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .tab-item {
+            color: #555;
+            font-size: 13px;
+            padding: 8px 4px;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.15s;
+        }
+
+        .tab-item.active {
+            color: #2c8df8;
+            font-weight: 500;
+        }
+
+        .tab-item.active::before {
+            content: "●";
+            color: #2c8df8;
+            margin-right: 6px;
+            font-size: 10px;
+        }
+
+        /* 表单多列布局 */
+        .form-row {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 22px;
+        }
+
+        .form-row .form-label {
+            width: 130px;
+            flex-shrink: 0;
+            text-align: right;
+            padding-right: 12px;
+            color: #333;
+            line-height: 32px;
+            font-size: 13px;
+        }
+
+        .form-row .form-label .star {
+            color: #f56c6c;
+            margin-right: 2px;
+        }
+
+        .form-row .form-control {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* select 样式 */
+        .input,
+        .select {
+            width: 100%;
+            height: 32px;
+            border: 1px solid #dcdfe6;
+            border-radius: 3px;
+            padding: 0 12px;
+            background: #fff;
+            color: #333;
+            transition: border-color 0.15s;
+        }
+
+        .input:focus,
+        .select:focus {
+            border-color: #2c8df8;
+        }
+
+        .input.error,
+        .select.error {
+            border-color: #f56c6c;
+        }
+
+        .input::placeholder,
+        .select::placeholder {
+            color: #c0c4cc;
+        }
+
+        /* 错误提示 */
+        .form-control .count {
+            font-size: 12px;
+            color: #909399;
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 4px;
+        }
+
+        /* 富文本编辑器 */
+        .editor-wrap {
+            border: 1px solid #dcdfe6;
+            border-radius: 3px;
+            background: #fff;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-bottom: 1px solid #ebeef5;
+            background: #fafbfc;
+            border-radius: 3px 3px 0 0;
+            flex-wrap: wrap;
+        }
+
+        .editor-toolbar .tb-btn {
+            min-width: 26px;
+            height: 24px;
+            padding: 0 6px;
+            border-radius: 3px;
+            font-size: 12px;
+            color: #555;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: transparent;
+        }
+
+        .editor-toolbar .tb-btn:hover {
+            background: #eaf3ff;
+            color: #2c8df8;
+        }
+
+        .editor-toolbar .tb-select {
+            height: 24px;
+            border: 1px solid #dcdfe6;
+            border-radius: 3px;
+            padding: 0 4px;
+            background: #fff;
+            font-size: 12px;
+            color: #555;
+        }
+
+        .editor-toolbar .tb-divider {
+            width: 1px;
+            height: 16px;
+            background: #ebeef5;
+        }
+
+        .editor-content {
+            min-height: 180px;
+            padding: 10px 12px;
+            outline: none;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .editor-content:empty::before {
+            content: attr(data-placeholder);
+            color: #c0c4cc;
+        }
+
+        /* 上传缩略图 */
+        .upload-thumb {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            border: 1px dashed #dcdfe6;
+            border-radius: 4px;
+            background: #fafafa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .upload-thumb:hover {
+            border-color: #2c8df8;
+            background: #f5faff;
+        }
+
+        .upload-thumb .plus {
+            font-size: 32px;
+            color: #b0b3b8;
+            font-weight: 200;
+            line-height: 1;
+            user-select: none;
+        }
+
+        /* 底部按钮 */
+        .form-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 18px;
+            border-top: 1px dashed #ebeef5;
+        }
+
+        .form-actions .btn {
+            min-width: 100px;
+        }
+
+        .btn-default {
+            background: #fff;
+            color: #555;
+            border: 1px solid #dcdfe6;
+        }
+
+        .btn-default:hover {
+            border-color: #2c8df8;
+            color: #2c8df8;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header class="admin-header">
+        <div class="header-left">
+            <button class="menu-toggle" title="菜单">
+                <span class="menu-icon">☰</span>
+            </button>
+        </div>
+        <div class="header-right">
+            <button class="icon-btn" title="帮助">?</button>
+            <div style="display:flex;align-items:center;gap:12px">
+              <button class="btn btn-default" onclick="toggleFuncModal()" style="font-size:12px;padding:4px 12px;border-radius:6px;background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.4)">📖 功能说明</button>
+              <div class="user-avatar" title="用户">头</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主体内容 -->
+    <main class="admin-main">
+        <!-- 面包屑 -->
+        <div class="breadcrumb">
+            <span class="breadcrumb-item">首页</span>
+            <span class="breadcrumb-sep">/</span>
+            <span class="breadcrumb-item">研学课程</span>
+            <span class="breadcrumb-sep">/</span>
+            <span class="breadcrumb-item active">产品发布</span>
+        </div>
+
+        <!-- 卡片主体 -->
+        <div class="admin-card">
+            <!-- 卡片头部 -->
+            <div class="card-head">
+                <div class="tab-bar">
+                    <span class="tab-item">首页</span>
+                    <span class="tab-item">执行机构管理</span>
+                    <span class="tab-item">课程管理</span>
+                    <span class="tab-item active">产品发布</span>
+                </div>
+            </div>
+
+            <!-- 表单主体 -->
+            <div class="card-body">
+                <div class="publish-section">
+                    <div class="publish-title"><span class="dot">●</span>基本信息</div>
+                    <form class="form" id="courseForm" autocomplete="off">
+                        <!-- 课程名称 -->
+                        <div class="form-row">
+                            <label class="form-label"><span class="star">*</span>课程名称</label>
+                            <div class="form-control">
+                                <input type="text" class="input error" id="courseName" placeholder="请输入课程名称" maxlength="40" />
+                                <div class="count"><span id="nameCount">0</span>/40</div>
+                            </div>
+                        </div>
+
+                        <!-- 经销机构 -->
+                        <div class="form-row">
+                            <label class="form-label"><span class="star">*</span>经销机构</label>
+                            <div class="form-control">
+                                <select class="select" id="dealerOrg">
+                                    <option value="">请选择经销机构</option>
+                                    <option>研学机构 A</option>
+                                    <option>研学机构 B</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 执行机构 -->
+                        <div class="form-row">
+                            <label class="form-label"><span class="star">*</span>执行机构</label>
+                            <div class="form-control">
+                                <select class="select" id="execOrg">
+                                    <option value="">请选择执行机构</option>
+                                    <option>杜甫草堂博物馆</option>
+                                    <option>成都研学中心</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 课程封面 -->
+                        <div class="form-row">
+                            <label class="form-label"><span class="star">*</span>课程封面</label>
+                            <div class="form-control">
+                                <div class="upload-thumb" onclick="alert('上传封面占位')">
+                                    <span class="plus">+</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 课程时间 -->
+                        <div class="form-row">
+                            <label class="form-label"><span class="star">*</span>课程时间</label>
+                            <div class="form-control">
+                                <input type="text" class="input" placeholder="请输入课程时间" />
+                            </div>
+                        </div>
+
+                        <!-- 课程地点 -->
+                        <div class="form-row">
+                            <label class="form-label"><span class="star">*</span>课程地点</label>
+                            <div class="form-control">
+                                <input type="text" class="input" id="courseAddress" placeholder="请输入课程地点" maxlength="80" />
+                                <div class="count"><span id="addrCount">0</span>/80</div>
+                            </div>
+                        </div>
+
+                        <!-- 简介 -->
+                        <div class="form-row">
+                            <label class="form-label"><span class="star">*</span>简介</label>
+                            <div class="form-control">
+                                <textarea class="input" id="brief" placeholder="请输入课程简介" style="height:70px;padding:8px 12px;line-height:1.6" maxlength="99"></textarea>
+                                <div class="count"><span id="briefCount">0</span>/99</div>
+                            </div>
+                        </div>
+
+                        <!-- 适用人群 -->
+                        <div class="form-row">
+                            <label class="form-label"><span class="star">*</span>适用人群</label>
+                            <div class="form-control">
+                                <textarea class="input" id="crowd" placeholder="请输入适用人群" style="height:70px;padding:8px 12px;line-height:1.6" maxlength="99"></textarea>
+                                <div class="count"><span id="crowdCount">0</span>/99</div>
+                            </div>
+                        </div>
+
+                        <!-- 自定义标签 -->
+                        <div class="form-row">
+                            <label class="form-label"><span class="star">*</span>自定义标签</label>
+                            <div class="form-control">
+                                <input type="text" class="input" placeholder="添加标签" style="width:150px" />
+                                <span style="font-size:13px;color:#909399;margin-left:8px">0/5</span>
+                            </div>
+                        </div>
+
+                        <!-- 详情 -->
+                        <div class="form-row">
+                            <label class="form-label"><span class="star">*</span>详情</label>
+                            <div class="form-control">
+                                <div class="editor-wrap">
+                                    <div class="editor-toolbar">
+                                        <button type="button" class="tb-btn"><b>B</b></button>
+                                        <button type="button" class="tb-btn"><i>I</i></button>
+                                        <button type="button" class="tb-btn"><u>U</u></button>
+                                        <span class="tb-divider"></span>
+                                        <button type="button" class="tb-btn">≡</button>
+                                        <button type="button" class="tb-btn">≣</button>
+                                        <button type="button" class="tb-btn">≣</button>
+                                        <span class="tb-divider"></span>
+                                        <select class="tb-select">
+                                            <option>14px</option>
+                                            <option>12px</option>
+                                            <option>16px</option>
+                                        </select>
+                                        <select class="tb-select">
+                                            <option>文本</option>
+                                            <option>标题</option>
+                                        </select>
+                                        <span class="tb-divider"></span>
+                                        <button type="button" class="tb-btn">• A</button>
+                                        <button type="button" class="tb-btn">≡</button>
+                                        <button type="button" class="tb-btn">≣</button>
+                                        <button type="button" class="tb-btn">⟸</button>
+                                        <button type="button" class="tb-btn">📎</button>
+                                        <button type="button" class="tb-btn">⊞</button>
+                                    </div>
+                                    <div class="editor-content" contenteditable="true" data-placeholder="请输入内容"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 操作按钮 -->
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" onclick="onSubmit()">保存</button>
+                            <button type="button" class="btn btn-default" onclick="onReset()">取消</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ====== 功能说明浮窗 ====== -->
+    <div class="f-modal" id="funcModal">
+      <div class="fm-title">
+        <span>📖 功能说明</span>
+        <button class="fm-close" onclick="toggleFuncModal()">✕</button>
+      </div>
+      <div class="fm-body">
+        <p style="margin:0 0 12px;color:#666">「课程发布」模块用于发布研学课程产品，所有标 <span style="color:#f56c6c">*</span> 项为必填。</p>
+        <h4>一、字段说明</h4>
+        <ul>
+          <li><strong>课程名称</strong>：必填，最多 40 字。</li>
+          <li><strong>经销机构 / 执行机构</strong>：必选。</li>
+          <li><strong>课程封面</strong>：必传，建议尺寸 800×600。</li>
+          <li><strong>课程时间</strong>：必填，描述课程开展时间。</li>
+          <li><strong>课程地点</strong>：必填，文本输入，最多 80 字，用于展示给用户。</li>
+          <li><strong>简介 / 适用人群</strong>：必填，各最多 99 字。</li>
+          <li><strong>自定义标签</strong>：必填，最多 5 个，用于检索与展示。</li>
+          <li><strong>详情</strong>：必填，富文本编辑，支持图文混排。</li>
+        </ul>
+        <h4>二、操作方式</h4>
+        <ul>
+          <li>填写完所有必填项后，点击底部「<strong>保存</strong>」即可提交。</li>
+          <li>点击「<strong>取消</strong>」清空已填写内容并重置表单。</li>
+        </ul>
+      </div>
+    </div>
+
+    <script>
+        // ========== 字数统计 ==========
+        function bindCount(inputId, countId, max) {
+            var input = document.getElementById(inputId);
+            var countEl = document.getElementById(countId);
+            if (!input || !countEl) return;
+            function update() {
+                var len = input.value.length;
+                countEl.textContent = len;
+                if (len > max) {
+                    input.classList.add('error');
+                } else {
+                    input.classList.remove('error');
+                }
+            }
+            input.addEventListener('input', update);
+            update();
+        }
+        bindCount('courseName', 'nameCount', 40);
+        bindCount('courseAddress', 'addrCount', 80);
+        bindCount('brief', 'briefCount', 99);
+        bindCount('crowd', 'crowdCount', 99);
+
+        // ========== 提交 / 重置 ==========
+        function onSubmit() {
+            var name = document.getElementById('courseName').value.trim();
+            if (!name) {
+                alert('请输入课程名称');
+                return;
+            }
+            alert('保存成功！');
+        }
+
+        function onReset() {
+            if (!confirm('确定要清空已填写的内容吗？')) return;
+            document.getElementById('courseForm').reset();
+            document.querySelectorAll('.form-control .count span').forEach(function (s) {
+                s.textContent = '0';
+            });
+            document.querySelectorAll('.input.error').forEach(function (el) {
+                el.classList.remove('error');
+            });
+        }
+    </script>
+    <script>
+        // ========== 功能说明浮窗：开关 + 拖拽 ==========
+        function toggleFuncModal() {
+            var el = document.getElementById('funcModal');
+            el.classList.toggle('show');
+            if (el.classList.contains('show') && !el.dataset.dragged) {
+                el.style.left = '50%'; el.style.top = '50%'; el.style.transform = 'translate(-50%,-50%)';
+            }
+        }
+        (function () {
+            var modal, titleBar, offX, offY, dragging = false;
+            document.addEventListener('DOMContentLoaded', function () {
+                modal = document.getElementById('funcModal');
+                titleBar = modal.querySelector('.fm-title');
+                titleBar.addEventListener('mousedown', startDrag);
+                titleBar.addEventListener('touchstart', startDragTouch, { passive: true });
+                document.addEventListener('mousemove', onDrag);
+                document.addEventListener('mouseup', endDrag);
+                document.addEventListener('touchmove', onDragTouch, { passive: true });
+                document.addEventListener('touchend', endDrag);
+            });
+            function startDrag(e) { modal.dataset.dragged = '1'; modal.style.transform = ''; var rect = modal.getBoundingClientRect(); offX = e.clientX - rect.left; offY = e.clientY - rect.top; dragging = true; titleBar.style.cursor = 'grabbing'; }
+            function startDragTouch(e) { var t = e.touches[0]; modal.dataset.dragged = '1'; modal.style.transform = ''; var rect = modal.getBoundingClientRect(); offX = t.clientX - rect.left; offY = t.clientY - rect.top; dragging = true; }
+            function onDrag(e) { if (!dragging) return; modal.style.left = (e.clientX - offX) + 'px'; modal.style.top = (e.clientY - offY) + 'px'; }
+            function onDragTouch(e) { if (!dragging) return; var t = e.touches[0]; modal.style.left = (t.clientX - offX) + 'px'; modal.style.top = (t.clientY - offY) + 'px'; }
+            function endDrag() { dragging = false; if (titleBar) titleBar.style.cursor = 'grab'; }
+        })();
+    </script>
+</body>
+</html>

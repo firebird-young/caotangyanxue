@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台管理系统 - 执行机构管理</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <!-- 引入 Layui 风格的图标（可选，使用简单 SVG/Unicode 代替） -->
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header class="admin-header">
+        <div class="header-left">
+            <button class="menu-toggle" title="菜单">
+                <span class="menu-icon">☰</span>
+            </button>
+        </div>
+        <div class="header-right">
+            <button class="icon-btn" title="帮助">?</button>
+            <div style="display:flex;align-items:center;gap:12px">
+              <button class="btn btn-default" onclick="toggleFuncModal()" style="font-size:12px;padding:4px 12px;border-radius:6px;background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.4)">📖 功能说明</button>
+              <div class="user-avatar" title="用户">头</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主体内容 -->
+    <main class="admin-main">
+        <!-- 面包屑 -->
+        <div class="breadcrumb">
+            <span class="breadcrumb-item">首页</span>
+            <span class="breadcrumb-sep">/</span>
+            <span class="breadcrumb-item">执行机构管理</span>
+            <span class="breadcrumb-sep">/</span>
+            <span class="breadcrumb-item active">执行机构管理</span>
+        </div>
+
+        <!-- 卡片主体 -->
+        <div class="admin-card">
+            <!-- 卡片头部：标签 + 新增按钮 -->
+            <div class="card-head">
+                <div class="tab-bar">
+                    <span class="tab-item active">● 执行机构管理</span>
+                </div>
+            </div>
+
+            <!-- 表格区 -->
+            <div class="card-body">
+                <div class="toolbar">
+                    <button class="btn btn-primary" id="btnAdd">
+                        <span class="btn-icon">+</span>
+                        <span>新增</span>
+                    </button>
+                </div>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="th-idx">序号</th>
+                            <th>机构名称</th>
+                            <th>创建时间</th>
+                            <th>修改时间</th>
+                            <th class="th-action">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td>1</td>
+                            <td>杜甫草堂</td>
+                            <td>2026-04-30 09:49:01</td>
+                            <td>2026-04-30 09:49:01</td>
+                            <td class="td-action">
+                                <button class="btn-mini btn-view">查看</button>
+                                <button class="btn-mini btn-edit">修改</button>
+                                <button class="btn-mini btn-delete">删除</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>成都古蜀文化旅游有限公司</td>
+                            <td>2025-11-10 10:45:03</td>
+                            <td>2025-11-10 10:45:03</td>
+                            <td class="td-action">
+                                <button class="btn-mini btn-view">查看</button>
+                                <button class="btn-mini btn-edit">修改</button>
+                                <button class="btn-mini btn-delete">删除</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>成都翊璇文化旅游开发有限公司</td>
+                            <td>2025-11-10 10:43:20</td>
+                            <td>2025-11-10 10:43:20</td>
+                            <td class="td-action">
+                                <button class="btn-mini btn-view">查看</button>
+                                <button class="btn-mini btn-edit">修改</button>
+                                <button class="btn-mini btn-delete">删除</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>杜甫研学</td>
+                            <td>2025-11-06 17:25:56</td>
+                            <td>2025-11-06 17:25:56</td>
+                            <td class="td-action">
+                                <button class="btn-mini btn-view">查看</button>
+                                <button class="btn-mini btn-edit">修改</button>
+                                <button class="btn-mini btn-delete">删除</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- 分页 -->
+                <div class="pagination">
+                    <span class="total">共 4 条</span>
+                    <div class="page-info">
+                        <button class="page-btn">‹</button>
+                        <span class="page-num active">1</span>
+                        <button class="page-btn">›</button>
+                    </div>
+                    <div class="page-size">
+                        <select>
+                            <option>20条/页</option>
+                            <option>50条/页</option>
+                            <option>100条/页</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 新增/编辑 弹窗 -->
+    <div class="modal-mask" id="modalMask">
+        <div class="modal" role="dialog" aria-labelledby="modalTitle">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">机构信息</h3>
+                <button class="modal-close" id="modalClose" aria-label="关闭">×</button>
+            </div>
+            <div class="modal-body">
+                <form class="form" id="orgForm" autocomplete="off">
+                    <!-- 机构名称 -->
+                    <div class="form-item">
+                        <label class="form-label required">
+                            <span class="star">*</span>机构名称
+                        </label>
+                        <div class="form-control">
+                            <input type="text" class="input" name="name" placeholder="请输入机构名称" />
+                        </div>
+                    </div>
+
+                    <!-- 机构 Logo -->
+                    <div class="form-item">
+                        <label class="form-label required">
+                            <span class="star">*</span>机构logo
+                        </label>
+                        <div class="form-control">
+                            <div class="uploader" data-target="logo">
+                                <input type="file" accept="image/*" hidden data-target="logo" />
+                                <div class="uploader-empty" data-target="logo">
+                                    <span class="uploader-plus">+</span>
+                                </div>
+                                <!-- 预览图容器 -->
+                                <div class="uploader-preview" data-target="logo" hidden>
+                                    <img alt="logo预览" />
+                                    <span class="uploader-remove" data-target="logo">×</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 上传证件或资质 -->
+                    <div class="form-item">
+                        <label class="form-label required">
+                            <span class="star">*</span>上传证件或资质：
+                        </label>
+                        <div class="form-control">
+                            <div class="uploader" data-target="license">
+                                <input type="file" accept="image/*" hidden data-target="license" />
+                                <div class="uploader-empty" data-target="license">
+                                    <span class="uploader-plus">+</span>
+                                </div>
+                                <div class="uploader-preview" data-target="license" hidden>
+                                    <img alt="证件预览" />
+                                    <span class="uploader-remove" data-target="license">×</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 联系电话号码 -->
+                    <div class="form-item">
+                        <label class="form-label required">
+                            <span class="star">*</span>联系电话号码
+                        </label>
+                        <div class="form-control">
+                            <input type="text" class="input" name="phone" placeholder="请输入联系电话号码" />
+                        </div>
+                    </div>
+
+                    <!-- 联系微信二维码 -->
+                    <div class="form-item">
+                        <label class="form-label required">
+                            <span class="star">*</span>联系微信二维码
+                        </label>
+                        <div class="form-control">
+                            <div class="uploader uploader-wechat" data-target="wechat">
+                                <input type="file" accept="image/*" hidden data-target="wechat" />
+                                <div class="uploader-empty" data-target="wechat">
+                                    <span class="uploader-plus">+</span>
+                                </div>
+                                <div class="uploader-preview" data-target="wechat" hidden>
+                                    <img alt="微信二维码预览" />
+                                    <span class="uploader-remove" data-target="wechat">×</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="btnSubmit">提交</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== 图片裁剪弹窗（logo，固定 1:1） ====== -->
+    <div class="modal-mask" id="cropMask">
+        <div class="crop-modal" role="dialog" aria-labelledby="cropTitle">
+            <div class="modal-header">
+                <h3 class="modal-title" id="cropTitle">裁剪图片</h3>
+                <button class="modal-close" id="cropBtnClose" aria-label="关闭">×</button>
+            </div>
+            <div class="crop-body">
+                <p class="crop-tip">拖动图片可移动裁剪区域，滚轮缩放，固定裁剪比例 1:1</p>
+                <div class="crop-canvas-wrap">
+                    <canvas id="cropCanvas" width="320" height="320"></canvas>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" id="cropBtnCancel" style="background:#f5f5f5;color:#555;border:1px solid #dcdfe6;margin-right:8px;">取消</button>
+                <button class="btn btn-primary" id="cropBtnConfirm">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== 功能说明浮窗 ====== -->
+    <div class="f-modal" id="funcModal">
+      <div class="fm-title">
+        <span>📖 功能说明</span>
+        <button class="fm-close" onclick="toggleFuncModal()">✕</button>
+      </div>
+      <div class="fm-body">
+        <p style="margin:0 0 12px;color:#666">本次「执行机构管理」模块新增了机构信息录入表单，包含 5 个必填字段，支持图片上传、裁剪与正则校验，已对接提交交互流程。</p>
+        <h4>一、机构扩展信息（本次新增）</h4>
+        <ul>
+          <li><strong>机构 logo</strong>：必填图片上传，选择图片后弹出裁剪窗口，可拖动/缩放图片，<strong>固定裁剪比例 1:1（方图）</strong>，确认后得到方形 logo 并显示预览，预览图右上角「×」可移除重传。</li>
+          <li><strong>联系电话号码</strong>：必填文本输入，<strong>不限制号码格式</strong>，可填写手机号、座机号等，仅校验必填，不校验号码格式。</li>
+          <li><strong>联系微信二维码</strong>：必填图片上传，仅支持图片格式，<strong>不限制图片尺寸与方图比例</strong>，选择后直接预览，预览图右上角「×」可移除重传。</li>
+        </ul>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

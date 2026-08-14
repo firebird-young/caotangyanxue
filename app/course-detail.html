@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>活动详情 - 我为杜甫建茅屋</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+            background: #d7dce2;
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 24px;
+            padding: 20px;
+        }
+        body .page-wrap { margin: 0; flex-shrink: 0; }
+
+        /* ===== 顶部导航 ===== */
+        .top-nav {
+            height: 50px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .back-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: #f5f5f5;
+            font-size: 18px;
+            color: #666;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .back-btn:active { background: #e8e8e8; }
+        .top-nav-title {
+            flex: 1;
+            text-align: center;
+            font-size: 17px;
+            font-weight: 600;
+            color: #333;
+            padding-right: 32px;
+        }
+
+        /* ===== 顶部悬浮：分享（位于手机框容器内，悬浮固定右上角） ===== */
+        .float-share {
+            position: sticky;
+            top: 58px;
+            float: right;
+            margin-right: 12px;
+            z-index: 99999;
+            background: #ffffff;
+            color: #333;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px solid #e6e8eb;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.16);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-direction: column;
+            font-family: inherit;
+        }
+        .float-share:active { background: #f0f0f0; }
+        .float-share .fs-icon { font-size: 16px; line-height: 1; }
+        .float-share .fs-label { font-size: 9px; margin-top: 3px; color: #666; }
+
+        /* ===== 内容容器 ===== */
+        .page-wrap {
+            max-width: 430px;
+            margin: 0 auto;
+            background: #fff;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 60px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        /* ===== 课程横幅 ===== */
+        .course-banner {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background: #A43021;
+            overflow: hidden;
+        }
+        .course-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ===== 标题卡 ===== */
+        .title-card { padding: 16px 16px 12px; }
+        .title-name { font-size: 18px; font-weight: 600; color: #333; }
+
+        /* ===== 价格行 ===== */
+        .price-row {
+            display: flex; align-items: flex-end; justify-content: space-between;
+            padding: 0 16px 12px;
+        }
+        .price { color: #E84C3D; font-size: 16px; font-weight: 600; display: flex; align-items: baseline; }
+        .price .price-big { font-size: 26px; font-weight: 700; margin: 0 2px; }
+        .price .price-dot { font-size: 14px; }
+        .price-tag { background: #FDE6C4; color: #C97735; font-size: 11px; padding: 4px 10px; border-radius: 11px; }
+
+        /* ===== 标签行 ===== */
+        .tag-row { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 12px; }
+        .tag { background: #FBE9D4; color: #B56B27; font-size: 11.5px; padding: 4px 10px; border-radius: 11px; }
+
+        /* ===== slogan ===== */
+        .slogan { padding: 0 16px 14px; color: #888; font-size: 13px; }
+
+        /* ===== 信息卡（新结构：图标 + 标题 + 虚线竖线 + 灰底圆角值框） ===== */
+        .info-block { margin: 0 16px 10px; }
+        .info-head {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 10px;
+        }
+        .info-head .info-emoji {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            font-size: 16px;
+            line-height: 1;
+        }
+        .info-head .info-title { font-size: 15px; font-weight: 600; color: #1a1a1a; }
+
+        /* 虚线竖线（连接每个模块） */
+        .info-dotted {
+            width: 1px;
+            height: 14px;
+            border-left: 1px dashed #C8CDD5;
+            margin-left: 11px;
+            margin-bottom: 10px;
+        }
+
+        /* 值容器：灰底圆角 */
+        .info-value-box {
+            background: #F4F5F7;
+            border-radius: 8px;
+            padding: 18px 16px;
+            font-size: 15px;
+            color: #222;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: default;
+        }
+        .info-value-box.clickable {
+            cursor: pointer;
+        }
+        .info-value-box.clickable:active {
+            background: #ECEEF2;
+        }
+        .info-value-box .info-value-text { font-size: 15px; color: #1a1a1a; }
+        .info-value-box .info-arrow { color: #B0B5BD; font-size: 18px; line-height: 1; font-weight: 300; }
+
+        /* ===== 执行机构（独立板块） ===== */
+        .org-module {
+            margin: 0 16px 14px;
+            background: #fff;
+            border-radius: 10px;
+            border: 1px solid #f0f0f0;
+            padding: 14px 16px;
+            cursor: pointer;
+        }
+        .org-module:active { background: #f7f7f7; }
+        .org-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .org-title::before {
+            content: "🏢";
+        }
+        .org-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .org-logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #fff;
+            border: 1px solid #ececec;
+            flex-shrink: 0;
+        }
+        .org-name {
+            font-size: 15px;
+            font-weight: 500;
+            color: #1a1a1a;
+        }
+
+        /* ===== Tab ===== */
+        .tab-bar {
+            display: flex; align-items: center; height: 46px;
+            border-bottom: 1px solid #f0f0f0; margin-top: 6px;
+        }
+        .tab { flex: 1; text-align: center; font-size: 14px; color: #555; position: relative; height: 46px; line-height: 46px; cursor: pointer; }
+        .tab.active { color: #E84C3D; font-weight: 600; }
+        .tab.active::after {
+            content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 24px; height: 3px; background: #E84C3D; border-radius: 2px;
+        }
+
+        /* ===== Tab 内容 ===== */
+        .tab-content { background: #fff; }
+        .tab-panel { display: none; padding: 16px; }
+        .tab-panel.active { display: block; }
+        .panel-title { font-size: 15px; font-weight: 600; color: #333; margin-bottom: 8px; }
+        .panel-text { font-size: 13px; line-height: 1.7; color: #555; margin-bottom: 6px; }
+
+        /* 课程简介里的海报缩略图 */
+        .detail-poster {
+            position: relative; height: 220px; border-radius: 12px; overflow: hidden; margin-bottom: 14px;
+            background: #A43021;
+        }
+        .detail-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ===== 底部固定栏 ===== */
+        .bottom-bar {
+            position: sticky; bottom: 0;
+            height: 56px; background: #fff; display: flex; align-items: center;
+            padding: 0 10px; border-top: 1px solid #eee; z-index: 60;
+            gap: 8px;
+            margin: 0 auto;
+        }
+        .bb-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-shrink: 0;
+        }
+        .bb-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: #555;
+            font-size: 11px;
+            line-height: 1;
+            padding: 0;
+        }
+        .bb-icon .bb-emoji {
+            font-size: 18px;
+            line-height: 1;
+        }
+        .bb-buy {
+            flex: 1;
+            background: #7E3C14;
+            color: #fff;
+            height: 44px;
+            border-radius: 22px;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-right: 4px;
+        }
+        .bb-buy .bb-price {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            opacity: 0.95;
+        }
+        .bb-buy .bb-sep {
+            width: 1px;
+            height: 18px;
+            background: rgba(255,255,255,0.35);
+        }
+
+        /* ── 功能说明面板（手机框右侧常驻） ── */
+        .doc-panel {
+            width: 560px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 20px rgba(0,0,0,.08);
+            padding: 24px 28px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', Arial, sans-serif;
+            line-height: 1.7;
+            font-size: 14px;
+            color: #333;
+            flex-shrink: 0;
+        }
+        .doc-panel::-webkit-scrollbar { width: 5px; }
+        .doc-panel::-webkit-scrollbar-thumb { background: #d0d5e0; border-radius: 3px; }
+        .doc-panel .doc-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1F3864;
+            border-bottom: 2px solid #2E75B6;
+            padding-bottom: 10px;
+            margin-bottom: 16px;
+        }
+        .doc-panel h3 { font-size: 16px; font-weight: 600; color: #2E75B6; margin: 16px 0 8px; }
+        .doc-panel p { font-size: 13px; color: #555; margin-bottom: 6px; }
+        .doc-panel ul { padding-left: 20px; margin: 4px 0 8px; }
+        .doc-panel li { margin-bottom: 3px; font-size: 13px; color: #555; }
+        @media (max-width: 1100px) {
+            body { flex-direction: column; align-items: center; }
+            .doc-panel { width: 100%; max-width: 430px; max-height: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-wrap">
+    <!-- 顶部导航 -->
+    <div class="top-nav">
+        <button class="back-btn" onclick="location.href='organization.html'">‹</button>
+        <div class="top-nav-title">活动详情</div>
+    </div>
+
+    <!-- 分享悬浮按钮（位于手机框容器内右上角） -->
+    <button class="float-share" onclick="alert('分享课程')" title="分享">
+        <span class="fs-icon">⤴</span>
+        <span class="fs-label">分享</span>
+    </button>
+
+    <!-- 课程横幅 -->
+    <div class="course-banner">
+        <img src="../asset/我为杜甫建茅屋.png" alt="我为杜甫建茅屋">
+    </div>
+
+    <!-- 标题卡 -->
+    <div class="title-card">
+        <div class="title-name">我为杜甫建茅屋</div>
+    </div>
+
+    <!-- 价格行 -->
+    <div class="price-row">
+        <div class="price">¥<span class="price-big">168</span><span class="price-dot">.00</span></div>
+        <div class="price-tag">拼团成行</div>
+    </div>
+
+    <!-- 标签行 -->
+    <div class="tag-row">
+        <span class="tag">古建智慧传承</span>
+        <span class="tag">传统榫卯工艺</span>
+        <span class="tag">沉浸式体验</span>
+    </div>
+
+    <!-- slogan -->
+    <div class="slogan">以古法手艺重现广厦理想。</div>
+
+    <!-- 课程地点（含 › 箭头） -->
+    <div class="info-block">
+        <div class="info-head">
+            <span class="info-emoji">📍</span>
+            <span class="info-title">课程地点</span>
+        </div>
+        <div class="info-dotted"></div>
+        <div class="info-value-box">
+            <span class="info-value-text">杜甫草堂博物馆</span>
+        </div>
+    </div>
+
+    <!-- 课程时间 -->
+    <div class="info-block">
+        <div class="info-head">
+            <span class="info-emoji">🕐</span>
+            <span class="info-title">课程时间</span>
+        </div>
+        <div class="info-dotted"></div>
+        <div class="info-value-box">
+            <span class="info-value-text">2026年8月18日</span>
+        </div>
+    </div>
+
+    <!-- 适用人群 -->
+    <div class="info-block">
+        <div class="info-head">
+            <span class="info-emoji">👤</span>
+            <span class="info-title">适用人群</span>
+        </div>
+        <div class="info-dotted"></div>
+        <div class="info-value-box">
+            <span class="info-value-text">8-13岁青少年，家长可陪同</span>
+        </div>
+    </div>
+
+    <!-- 执行机构（独立板块，点击跳转机构主页） -->
+    <div class="org-module" onclick="location.href='organization.html'">
+        <div class="org-title">执行机构</div>
+        <div class="org-box">
+            <img class="org-logo" src="../asset/古猫logo.png" alt="成都古猫文化旅游有限公司">
+            <span class="org-name">成都古猫文化旅游有限公司</span>
+        </div>
+    </div>
+
+    <!-- Tab 切换 -->
+    <div class="tab-bar">
+        <span class="tab active" data-tab="intro">课程简介</span>
+        <span class="tab" data-tab="fee">费用说明</span>
+        <span class="tab" data-tab="notice">预定须知</span>
+        <span class="tab" data-tab="cancel">取消政策</span>
+    </div>
+
+    <!-- Tab 内容 -->
+    <div class="tab-content">
+        <div class="tab-panel active" id="tab-intro">
+            <div class="detail-poster">
+                <img src="../asset/我为杜甫建茅屋.png" alt="我为杜甫建茅屋">
+            </div>
+            <div class="panel-title">课程简介</div>
+            <p class="panel-text">本课程以杜甫草堂为背景，以"为杜甫建一间茅屋"为主线任务，带领青少年走进诗圣故里，了解唐五代至明清古建筑的结构智慧，亲手体验传统榫卯工艺的精妙。</p>
+            <p class="panel-text">学生将以小组协作的方式，从丈量、绘图到搭建完成一座微型茅屋模型，将诗意与传统营造技艺结合，在沉浸式体验中感受古典文化与工匠精神。</p>
+        </div>
+        <div class="tab-panel" id="tab-fee">
+            <div class="panel-title">费用说明</div>
+            <p class="panel-text">费用包含：课程教学、材料包、午餐、教材、保险。不含交通及个人消费。</p>
+        </div>
+        <div class="tab-panel" id="tab-notice">
+            <div class="panel-title">预定须知</div>
+            <p class="panel-text">请提前 3 天预约，预约成功后工作人员将与您电话确认。开课前会有装备清单与温馨提示推送。</p>
+        </div>
+        <div class="tab-panel" id="tab-cancel">
+            <div class="panel-title">取消政策</div>
+            <p class="panel-text">开课前 3 天可全额退款，1–3 天退款 50%，开课当天不退；如遇恶劣天气课程顺延或全额退款。</p>
+        </div>
+    </div>
+
+<!-- 底部固定操作栏 -->
+<div class="bottom-bar">
+    <div class="bb-left">
+        <button class="bb-icon" onclick="phoneConsult()">
+            <span class="bb-emoji">📞</span>
+            <span>电话咨询</span>
+        </button>
+        <button class="bb-icon" onclick="alert('在线客服')">
+            <span class="bb-emoji">💬</span>
+            <span>在线客服</span>
+        </button>
+    </div>
+    <button class="bb-buy">
+        <span class="bb-price">¥168.00</span>
+        <span class="bb-sep"></span>
+        <span>立即购买</span>
+    </button>
+</div>
+
+<script>
+    // Tab 切换
+    document.querySelectorAll('.tab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            document.querySelectorAll('.tab').forEach(function (t) { t.classList.remove('active'); });
+            document.querySelectorAll('.tab-panel').forEach(function (p) { p.classList.remove('active'); });
+            tab.classList.add('active');
+            document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+        });
+    });
+
+    // 电话咨询：二次确认后拨打
+    function phoneConsult() {
+        if (confirm('将为您拨打咨询电话 028-22222222')) {
+            window.location.href = 'tel:02822222222';
+        }
+    }
+</script>
+</div><!-- /page-wrap -->
+
+<div class="doc-panel">
+    <div class="doc-title">活动详情 - 新增功能说明</div>
+    <div class="doc-section">
+        <h3>1. 新增：课程地点模块</h3>
+        <p>在课程信息区新增"课程地点"模块</p>
+    </div>
+    <div class="doc-section">
+        <h3>2. 新增：执行机构模块</h3>
+        <p>新增"执行机构"独立板块，展示执行机构 Logo 与名称，点击机构卡片可跳转至该机构主页。</p>
+    </div>
+    <div class="doc-section">
+        <h3>3. 新增：底部客服入口</h3>
+        <ul>
+            <li><b>电话咨询</b>：底部新增"电话咨询"入口，点击二次确认后调起系统拨号拨打咨询电话。</li>
+            <li><b>在线客服</b>：底部新增"在线客服"入口，点击弹出在线客服咨询窗口。</li>
+        </ul>
+    </div>
+    <div class="doc-section">
+        <h3>4. 调整：分享按钮位置</h3>
+        <p>分享按钮位置调整，由原位置移至手机框容器内右上角悬浮展示，点击弹出分享操作面板。</p>
+    </div>
+</div>
+
+</body>
+</html>
