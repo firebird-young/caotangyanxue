@@ -646,9 +646,11 @@ select {
 .f-modal .fm-title:active { cursor: grabbing; }
 .f-modal .fm-close { width: 28px; height: 28px; border-radius: 50%; background: #f5f5f5; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; color: #666; border: none; flex-shrink: 0; }
 .f-modal .fm-close:hover { background: #e8e8e8; }
-.f-modal .fm-body { font-size: 13px; color: #555; line-height: 1.8; }
-.f-modal .fm-body h4 { font-size: 14px; font-weight: 600; color: #1a1a2e; margin: 16px 0 8px; }
+.f-modal .fm-body { font-size: 15px; color: #333; line-height: 1.9; }
+.f-modal .fm-body p { margin: 0 0 12px; color: #333 !important; }
+.f-modal .fm-body h4 { font-size: 16px; font-weight: 600; color: #1a1a2e; margin: 16px 0 8px; }
 .f-modal .fm-body h4:first-child { margin-top: 0; }
-.f-modal .fm-body ul { padding-left: 18px; margin: 0 0 12px; }
-.f-modal .fm-body li { margin-bottom: 4px; }
+.f-modal .fm-body ul { padding-left: 20px; margin: 0 0 12px; }
+.f-modal .fm-body li { margin-bottom: 6px; }
+.f-modal .fm-body strong { color: #1a1a2e; }
 .f-modal .fm-body code { background: #f5f5f5; padding: 1px 6px; border-radius: 3px; font-family: Consolas, Monaco, monospace; color: #e83e8c; }

@@ -162,13 +162,6 @@
                             <input type="text" class="input" id="cfgValue" placeholder="请输入参数值" />
                         </div>
                     </div>
-                    <!-- 备注 -->
-                    <div class="form-item">
-                        <label class="form-label">备注</label>
-                        <div class="form-control">
-                            <input type="text" class="input" id="cfgRemark" placeholder="选填，参数说明" />
-                        </div>
-                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -202,10 +195,9 @@
         var modalMask = document.getElementById('modalMask');
         var cfgName = document.getElementById('cfgName');
         var cfgValue = document.getElementById('cfgValue');
-        var cfgRemark = document.getElementById('cfgRemark');
 
         var PARAM_META = {
-            phone: { name: '咨询电话', elId: 'phoneValue', remark: '' }
+            phone: { name: '咨询电话', elId: 'phoneValue' }
         };
 
         function openEdit(key) {
@@ -213,7 +205,6 @@
             if (!meta) return;
             cfgName.value = meta.name;
             cfgValue.value = document.getElementById(meta.elId).textContent;
-            cfgRemark.value = meta.remark;
             modalMask.classList.add('show');
             document.body.style.overflow = 'hidden';
         }
@@ -240,7 +231,6 @@
             }
             var meta = PARAM_META.phone;
             document.getElementById(meta.elId).textContent = value;
-            meta.remark = cfgRemark.value.trim();
             alert('保存成功！');
             closeModal();
         });
