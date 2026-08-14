@@ -129,10 +129,12 @@
             overflow: hidden;
             margin-bottom: 12px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            position: relative;
         }
         .course-cover {
+            position: relative;
             width: 100%;
-            height: 180px;
+            height: 220px;
             overflow: hidden;
         }
         .course-cover img {
@@ -140,6 +142,34 @@
             height: 100%;
             object-fit: cover;
             display: block;
+        }
+        /* 图片下半部分渐变遮罩 */
+        .course-cover::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            height: 55%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 100%);
+            pointer-events: none;
+        }
+        .course-overlay {
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            padding: 14px 16px;
+            color: #fff;
+            z-index: 2;
+        }
+        .course-subtitle {
+            font-size: 14px;
+            color: #fff;
+            line-height: 1.5;
+            margin-bottom: 6px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        .course-date {
+            font-size: 13px;
+            color: rgba(255,255,255,0.9);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
         .course-info {
             padding: 14px 16px;
@@ -156,26 +186,23 @@
             font-size: 15px;
             font-weight: 600;
             color: #1a1a1a;
-            margin-bottom: 8px;
+            line-height: 1.4;
         }
         .course-price {
-            font-size: 15px;
-            color: #E84C3D;
+            flex-shrink: 0;
+            font-size: 18px;
+            color: #8B4513;
+            font-weight: 700;
+        }
+        .course-price::before {
+            content: '¥';
+            font-size: 13px;
+            margin-right: 1px;
             font-weight: 600;
         }
         .course-detail-btn {
-            flex-shrink: 0;
-            background: #E84C3D;
-            color: #fff;
-            border: none;
-            border-radius: 18px;
-            padding: 8px 16px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: opacity 0.15s;
+            display: none;
         }
-        .course-detail-btn:active { opacity: 0.85; }
 
         /* 占位（无更多时） */
         .empty-tip {
@@ -310,16 +337,19 @@
 
     <!-- 该机构提供的课程列表 -->
     <div class="course-list">
-        <div class="course-card">
+        <div class="course-card" onclick="goCourseDetail()">
             <div class="course-cover">
                 <img src="../asset/我为杜甫建茅屋.png" alt="我为杜甫建茅屋">
+                <div class="course-overlay">
+                    <div class="course-subtitle">以古法手艺重现广厦理想。</div>
+                    <div class="course-date">6月19日</div>
+                </div>
             </div>
             <div class="course-info">
                 <div class="course-detail">
                     <div class="course-name">我为杜甫建茅屋</div>
-                    <div class="course-price">¥168元</div>
                 </div>
-                <button class="course-detail-btn" onclick="goCourseDetail()">活动详情</button>
+                <div class="course-price">168.00</div>
             </div>
         </div>
 
@@ -344,8 +374,9 @@
     <div class="doc-section">
         <h3>3. 课程列表</h3>
         <ul>
-            <li><b>课程卡片</b>：展示该机构下面的在线的课程。</li>
-            <li><b>活动详情</b>：点击「活动详情」按钮跳转至对应课程详情页查看完整介绍。</li>
+            <li><b>课程卡片</b>：展示该机构已上架的课程。上半部分为课程封面图，叠加渐变遮罩展示课程副标题与开课日期。</li>
+            <li><b>课程信息</b>：卡片底部展示课程名称（左侧）和价格（右侧，¥+金额）。</li>
+            <li><b>进入详情</b>：点击课程卡片任意位置即可跳转至对应课程详情页查看完整介绍。</li>
         </ul>
     </div>
 </div>
