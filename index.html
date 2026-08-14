@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>草堂 - 需求文档</title>
+    <style>
+        :root {
+            --bg: #f5f6fa;
+            --card: #ffffff;
+            --border: #e8eaf0;
+            --ink: #1f2430;
+            --ink-subtle: #8a91a0;
+            --accent: #2c8df8;
+            --green: #2f9e63;
+            --orange: #e8902c;
+            --gray: #7a8190;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: var(--bg);
+            color: var(--ink);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            padding: 40px 16px;
+        }
+        .page-title {
+            max-width: 760px;
+            margin: 0 auto 24px;
+            padding: 0 4px;
+        }
+        .page-title h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .page-title p {
+            margin-top: 8px;
+            font-size: 14px;
+            color: var(--ink-subtle);
+        }
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .section {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.15s;
+        }
+        .section-header:hover {
+            background: #fafbfd;
+        }
+        .sh-label {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .sh-toggle {
+            font-size: 12px;
+            color: var(--ink-subtle);
+            font-weight: 400;
+        }
+        .list {
+            border-top: 1px solid var(--border);
+        }
+        .item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            text-decoration: none;
+            color: var(--ink);
+            transition: background 0.15s;
+        }
+        .item:hover {
+            background: #fafbfd;
+        }
+        .item .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            flex-shrink: 0;
+        }
+        .item .it-label {
+            flex: 1;
+            font-size: 15px;
+        }
+        .it-tag {
+            font-size: 12px;
+            padding: 2px 10px;
+            border-radius: 999px;
+            flex-shrink: 0;
+        }
+        .it-tag.gray {
+            background: #eef0f4;
+            color: var(--gray);
+        }
+        .it-tag.green {
+            background: #e7f6ee;
+            color: var(--green);
+        }
+        .it-tag.orange {
+            background: #fdf0e2;
+            color: var(--orange);
+        }
+        .it-arrow {
+            color: var(--ink-subtle);
+            flex-shrink: 0;
+        }
+        .sub-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--ink);
+            transition: background 0.15s;
+        }
+        .sub-item:hover {
+            background: #fafbfd;
+        }
+        .sub-item .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            flex-shrink: 0;
+        }
+        .sub-item .it-label {
+            flex: 1;
+            font-size: 15px;
+        }
+        .sub-item .it-arrow {
+            color: var(--ink-subtle);
+        }
+        .group-title {
+            padding: 14px 18px 8px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--ink);
+        }
+        .group-body {
+            border-top: 1px solid var(--border);
+            padding: 6px 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-title">
+        <h1>草堂 - 需求文档</h1>
+        <p>产品原型页面索引</p>
+    </div>
+
+    <div class="container">
+        <div class="section">
+            <div class="section-header" onclick="toggleSection('iter20260814')">
+                <span class="sh-label">2026.8.14 迭代 <span class="sh-toggle" id="iter20260814Toggle">▴ 收起</span></span>
+            </div>
+            <div class="list" id="iter20260814List">
+                <div class="group-title">后台管理</div>
+                <div class="group-body">
+                    <a class="sub-item" href="admin/课程发布.html">
+                        <span class="dot"></span>
+                        <span class="it-label">课程发布</span>
+                        <span class="it-tag gray">待开发</span>
+                        <span class="it-arrow">›</span>
+                    </a>
+                    <a class="sub-item" href="admin/业务参数配置.html">
+                        <span class="dot"></span>
+                        <span class="it-label">业务参数配置</span>
+                        <span class="it-tag gray">待开发</span>
+                        <span class="it-arrow">›</span>
+                    </a>
+                    <a class="sub-item" href="admin/执行机构管理.html">
+                        <span class="dot"></span>
+                        <span class="it-label">执行机构管理</span>
+                        <span class="it-tag gray">待开发</span>
+                        <span class="it-arrow">›</span>
+                    </a>
+                </div>
+                <div class="group-title" style="border-top:1px solid var(--border);padding-top:14px;">App 端</div>
+                <div class="group-body">
+                    <a class="sub-item" href="app/course-detail.html">
+                        <span class="dot"></span>
+                        <span class="it-label">课程详情</span>
+                        <span class="it-tag gray">待开发</span>
+                        <span class="it-arrow">›</span>
+                    </a>
+                    <a class="sub-item" href="app/organization.html">
+                        <span class="dot"></span>
+                        <span class="it-label">机构主页</span>
+                        <span class="it-tag gray">待开发</span>
+                        <span class="it-arrow">›</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var iter20260814Collapsed = false;
+
+        function toggleSection(id) {
+            var list = document.getElementById(id + 'List');
+            var toggle = document.getElementById(id + 'Toggle');
+            if (id === 'iter20260814') {
+                iter20260814Collapsed = !iter20260814Collapsed;
+                var collapsed = iter20260814Collapsed;
+            } else {
+                return;
+            }
+            if (collapsed) {
+                list.style.display = 'none';
+                toggle.textContent = '▾ 展开';
+            } else {
+                list.style.display = '';
+                toggle.textContent = '▴ 收起';
+            }
+        }
+    </script>
+</body>
+</html>
